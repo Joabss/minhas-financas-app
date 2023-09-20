@@ -1,14 +1,13 @@
-import ApiService from "../api-service";
+import ApiService from '../api-service';
 
-import ErroValidacao from "../exception/erroValidacao";
+import ErroValidacao from '../exception/erroValidacao';
 
 export default class LancamentoService extends ApiService {
-
     constructor() {
         super('/api/lancamentos');
     }
 
-    obterMeses() {
+    obterListaMeses() {
         return [
             { label: 'Selecione', value: '' },
             { label: 'Janeiro', value: 1 },
@@ -22,16 +21,16 @@ export default class LancamentoService extends ApiService {
             { label: 'Setembro', value: 9 },
             { label: 'Outubro', value: 10 },
             { label: 'Novembro', value: 11 },
-            { label: 'Dezembro', value: 12 }
-        ]
+            { label: 'Dezembro', value: 12 },
+        ];
     }
 
-    obterTipos() {
+    obterListaTipos() {
         return [
             { label: 'Selecione', value: '' },
             { label: 'Despesa', value: 'DESPESA' },
-            { label: 'Receita', value: 'RECEITA' }
-        ]
+            { label: 'Receita', value: 'RECEITA' },
+        ];
     }
 
     obterPorId(id) {
@@ -46,23 +45,23 @@ export default class LancamentoService extends ApiService {
         const erros = [];
 
         if (!lancamento.descricao) {
-            erros.push("Informe a descrição")
+            erros.push('Informe a descrição');
         }
 
         if (!lancamento.ano) {
-            erros.push("Informe o Ano")
+            erros.push('Informe o Ano');
         }
 
         if (!lancamento.mes) {
-            erros.push("Informe o Mes")
+            erros.push('Informe o Mes');
         }
 
         if (!lancamento.valor) {
-            erros.push("Informe o valor")
+            erros.push('Informe o valor');
         }
 
         if (!lancamento.tipo) {
-            erros.push("Informe o tipo")
+            erros.push('Informe o tipo');
         }
 
         if (erros && erros.length > 0) {
@@ -106,9 +105,5 @@ export default class LancamentoService extends ApiService {
 
     deletar(id) {
         return this.delete(`/${id}`);
-    }
-
-    obterSaldoPorUsuario(id) {
-        return this.get(`/${id}/saldo`);
     }
 }

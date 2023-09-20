@@ -1,31 +1,29 @@
-import ApiService from "../api-service";
-import LocalStorageService from "./localStorageService";
+import ApiService from '../api-service';
+import LocalStorageService from './localStorageService';
 
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 export const USUARIO_LOGADO = '_usuario_logado';
 export const TOKEN = 'access_token';
 
 export default class AuthService {
-
     static isUsuarioAutenticado() {
         const token = LocalStorageService.obterItem(TOKEN);
 
-        if(token){
+        if (token) {
             const decodedToken = jwt.decode(token);
             const expiration = decodedToken.exp;
-            const isTokenInvalid = Date.now() >= (expiration * 1000);
-    
+            const isTokenInvalid = Date.now() >= expiration * 1000;
+
             return !isTokenInvalid;
         } else {
             return false;
         }
     }
 
-    static removerUsuarioAutenticado(chave) {
+    static removerUsuarioAutenticado() {
         LocalStorageService.removerItem(USUARIO_LOGADO);
         LocalStorageService.removerItem(TOKEN);
-
     }
 
     static logar(usuario, token) {
@@ -39,9 +37,9 @@ export default class AuthService {
     }
 
     static refreshSession() {
-         const token = LocalStorageService.obterItem(TOKEN);
-         const usuario = AuthService.obterUsuarioAutenticado();
-         AuthService.logar(usuario, token);
-         return usuario;
+        const token = LocalStorageService.obterItem(TOKEN);
+        const usuario = AuthService.obterUsuarioAutenticado();
+        AuthService.logar(usuario, token);
+        return usuario;
     }
 }

@@ -1,58 +1,58 @@
-import React from "react";
+import React from 'react';
 
-import AuthService from "../app/service/authService";
-import jwt from "jsonwebtoken";
+import AuthService from '../app/service/authService';
+import jwt from 'jsonwebtoken';
 
-export const AuthContext = React.createContext({});
+export const AuthContext = React.createContext();
 export const AuthConsumer = AuthContext.Consumer;
+
 const AuthProvider = AuthContext.Provider;
 
 class AuthenticationProvider extends React.Component {
-
     state = {
         usuarioAutenticado: null,
         isAutenticado: false,
-        isLoading: true
-    }
+        isLoading: true,
+    };
 
     iniciarSessao = (tokenDTO) => {
         const token = tokenDTO.token;
         const decodedToken = jwt.decode(token);
         const usuario = {
             id: decodedToken.userId,
-            nome: decodedToken.nome
-        }
+            nome: decodedToken.nome,
+        };
+
         AuthService.logar(usuario, token);
         this.setState({ isAutenticado: true, usuarioAutenticado: usuario });
-    }
+    };
 
     encerrarSessao = () => {
         AuthService.removerUsuarioAutenticado();
         this.setState({ isAutenticado: false, usuarioAutenticado: null });
-    }
+    };
 
     componentDidMount() {
         const isAutenticado = AuthService.isUsuarioAutenticado();
-
-        if(isAutenticado) {
+        if (isAutenticado) {
             const usuario = AuthService.refreshSession();
-            this.setState({ 
-                isAutenticado: true, 
+            this.setState({
+                isAutenticado: true,
                 usuarioAutenticado: usuario,
-                isLoading: false
+                isLoading: false,
             });
         } else {
-            this.setState(previousState =>{
+            this.setState((previousState) => {
                 return {
-                    ... previousState,
-                    isLoading: false
-                }
-            })
+                    ...previousState,
+                    isLoading: false,
+                };
+            });
         }
     }
 
     render() {
-        if(this.state.isLoading){
+        if (this.state.isLoading) {
             return null;
         }
 
@@ -60,14 +60,12 @@ class AuthenticationProvider extends React.Component {
             usuarioAutenticado: this.state.usuarioAutenticado,
             isAutenticado: this.state.isAutenticado,
             iniciarSessao: this.iniciarSessao,
-            encerrarSessao: this.encerrarSessao
-        }
+            encerrarSessao: this.encerrarSessao,
+        };
 
         return (
-            <AuthProvider value={contexto} >
-                {this.props.children}
-            </AuthProvider>
-        )
+            <AuthProvider value={contexto}>{this.props.children}</AuthProvider>
+        );
     }
 }
 
