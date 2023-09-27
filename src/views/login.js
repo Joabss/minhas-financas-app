@@ -9,15 +9,15 @@ import { mensagemErro } from '../components/toastr';
 import { AuthContext } from '../main/authProvider';
 
 class Login extends React.Component {
-    constructor() {
-        super();
-        this.usuarioService = new UsuarioService();
-    }
-
     state = {
         email: '',
         senha: '',
     };
+
+    constructor() {
+        super();
+        this.usuarioService = new UsuarioService();
+    }
 
     entrar = () => {
         this.usuarioService
